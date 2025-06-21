@@ -2,6 +2,9 @@
 
 A robust and scalable Library Management System API built with **Express.js**, **TypeScript**, and **MongoDB (Mongoose)**. This API provides comprehensive functionalities for managing a library's book inventory and tracking borrowing records, ensuring data integrity through strong schema validation and business logic enforcement.
 
+## 🌐 [Live Deployment Link](https://assignment-3-l2-three.vercel.app/)
+## 🎬 [Video Explanation Link](https://drive.google.com/file/d/1mYG2tgQFmry4Tb7QvKyZPHlCVpyZLNS1/view?usp=sharing)
+
 ## ✨ Features
 
 -   **Book Management (CRUD):**
