@@ -4,6 +4,7 @@ import connectDB from "./config/db";
 import bookRoutes from "./routes/book.routes";
 import borrowRoutes from "./routes/borrow.routes";
 import errorHandler from "./middleware/errorHandler";
+import ApiResponse from "./utils/apiResponse";
 
 dotenv.config();
 
@@ -13,6 +14,18 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        null,
+        "Welcome to the Library Management API! Access API endpoints via /api/books or /api/borrow.",
+      ),
+    );
+});
 
 app.use("/api/books", bookRoutes);
 app.use("/api/borrow", borrowRoutes);
