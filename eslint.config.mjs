@@ -17,7 +17,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
 
   ...compat.extends(
-    "prettier", // eslint-config-prettier
+    "prettier", // eslint-config-prettier ------------------ Command: npm run lint:fix --------- npm run lint
     "plugin:prettier/recommended",
   ),
   {

@@ -8,6 +8,7 @@ interface GetAllBooksQuery {
   sortBy?: keyof IBook;
   sort?: "asc" | "desc";
   limit?: string;
+  page?: string;
 }
 
 export const createBook = async (
@@ -32,7 +33,7 @@ export const getAllBooks = async (
   next: NextFunction,
 ) => {
   try {
-    const { filter, sortBy, sort, limit } = req.query as GetAllBooksQuery;
+    const { filter, sortBy, sort, limit, page } = req.query as GetAllBooksQuery;
 
     const query: { genre?: BookGenre } = {};
 
@@ -69,16 +70,26 @@ export const getAllBooks = async (
       sortOptions.createdAt = -1;
     }
 
-    const parsedLimit = parseInt(limit as string, 10) || 10;
-    if (parsedLimit <= 0) {
-      throw new ApiError(400, "Limit must be a positive number.");
-    }
+    const itemsPerPage = parseInt(limit as string, 10) || 10;
+    const currentPage = parseInt(page as string, 10) || 1;
+    const skip = (currentPage - 1) * itemsPerPage;
 
-    const books = await Book.find(query).sort(sortOptions).limit(parsedLimit);
+    const totalItems = await Book.countDocuments(query);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    res
-      .status(200)
-      .json(new ApiResponse(200, books, "Books retrieved successfully"));
+    const books = await Book.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(itemsPerPage);
+
+    res.status(200).json(
+      new ApiResponse(200, books, "Books retrieved successfully", {
+        currentPage: currentPage,
+        itemsPerPage: itemsPerPage,
+        totalItems: totalItems,
+        totalPages: totalPages,
+      }),
+    );
   } catch (error: unknown) {
     next(error);
   }
